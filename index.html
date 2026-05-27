@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>爱豆动物塑模拟器</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app">
+    <div id="page-home" class="page"></div>
+    <div id="page-quiz" class="page"></div>
+    <div id="page-result" class="page"></div>
+    <div id="page-animal-list" class="page"></div>
+    <div id="page-shelter" class="page"></div>
+    <div id="page-care" class="page"></div>
+    <div id="page-inventory" class="page"></div>
+    <div id="page-profile" class="page"></div>
+  </div>
+
+  <!-- 按依赖顺序加载 -->
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/data/animals.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/quotes.js"></script>
+  <script src="js/share.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/checkin.js"></script>
+  <script src="js/pet.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
