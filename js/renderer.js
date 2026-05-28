@@ -570,6 +570,50 @@ const PixelRenderer = (() => {
   }
 
   // 主渲染函数
+  // 奶牛猫花纹
+  function drawTuxedoMarkings(ctx, pos, colors, stage, anim) {
+    const patch = colors.secondary; // 黑色斑块
+    const s = stageScale(stage);
+    const bodyW = Math.round(6 * s.body);
+    const bodyH = Math.round(5 * s.body);
+    const headSize = Math.round(5 * s.head);
+    const hx = pos.headX;
+    const hy = pos.headY;
+    const by = pos.baseY;
+
+    // 额头黑色斑块
+    rect(ctx, hx - 1, hy - (headSize >> 1), 3, 2, patch);
+    px(ctx, hx, hy - (headSize >> 1) + 2, patch);
+
+    // 耳朵覆盖为黑色
+    const earW = Math.max(2, headSize >> 2);
+    for (let i = 0; i < earW; i++) {
+      rect(ctx, hx - (headSize >> 1) + i, hy - (headSize >> 1) - earW + i, 1, 1, patch);
+      rect(ctx, hx + (headSize >> 1) - i, hy - (headSize >> 1) - earW + i, 1, 1, patch);
+    }
+    // 保留粉色内耳
+    px(ctx, hx - (headSize >> 1) + 1, hy - (headSize >> 1) - earW + 2, '#FFB6C1');
+    px(ctx, hx + (headSize >> 1) - 1, hy - (headSize >> 1) - earW + 2, '#FFB6C1');
+
+    // 背部黑色斑块
+    rect(ctx, hx - 1, by, bodyW >> 1, 2, patch);
+    rect(ctx, hx + 1, by + 2, (bodyW >> 2), 1, patch);
+
+    // 左侧身体斑块
+    rect(ctx, hx - (bodyW >> 1) + 1, by + 1, 2, 2, patch);
+
+    // 尾巴黑色
+    const tailX = hx + (bodyW >> 1);
+    rect(ctx, tailX, by, 1, 1, patch);
+    rect(ctx, tailX + 1, by - 1, 1, 1, patch);
+    rect(ctx, tailX + 2, by - 2, 1, 1, patch);
+
+    // 胡须用黑色
+    const eyeOff = Math.max(1, headSize >> 2);
+    rect(ctx, hx - eyeOff - 3, hy + 1, 2, 1, '#333333');
+    rect(ctx, hx + eyeOff + 2, hy + 1, 2, 1, '#333333');
+  }
+
   function drawAnimal(canvas, animalId, level, anim, frame, equippedItems) {
     const animal = getAnimalById(animalId);
     if (!animal) return;
@@ -598,6 +642,11 @@ const PixelRenderer = (() => {
     const bodyType = animal.render.baseBody;
     const template = bodyTemplates[bodyType] || bodyTemplates.wild;
     const pos = template(ctx, colors, stage, anim, frame, offsetY);
+
+    // 特殊花纹
+    if (animal.render.markings === 'tuxedo') {
+      drawTuxedoMarkings(ctx, pos, colors, stage, anim);
+    }
 
     // 特效
     drawEffects(ctx, anim, frame, stage, pos.headX, pos.headY);

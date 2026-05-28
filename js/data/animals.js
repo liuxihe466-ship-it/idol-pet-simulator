@@ -118,7 +118,7 @@ const ANIMALS = [
       height_small: 0, height_medium: 3, height_tall: 0, height_large: 0,
       sense_cat: 3, sense_dog: 0, sense_rabbit: 0, sense_bear: 0, sense_fox: 0, sense_bird: 0,
     },
-    render: { baseBody: 'cat', primaryColor: '#1A1A1A', secondaryColor: '#FFFFFF', earType: 'cat_triangle', tailType: 'cat_long', eyeColor: '#4CAF50', markings: 'tuxedo' },
+    render: { baseBody: 'cat', primaryColor: '#FFFFFF', secondaryColor: '#1A1A1A', earType: 'cat_triangle', tailType: 'cat_long', eyeColor: '#4CAF50', markings: 'tuxedo' },
   },
   {
     id: 'british_short', name: '英短', category: 'cat',
