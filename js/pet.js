@@ -190,6 +190,17 @@ const PetCare = (() => {
 
       setTimeout(() => showModal(rewardMsg), 500);
 
+      // Lv.10 自动解锁槽位
+      if (pet.level === 10 && !pet.slotUnlockTriggered) {
+        pet.slotUnlockTriggered = true;
+        const currentSlots = Storage.getUnlockedSlots();
+        if (currentSlots < 13) {
+          Storage.saveUnlockedSlots(currentSlots + 1);
+          Audio8Bit.playUnlock();
+          setTimeout(() => showModal('恭喜达到 Lv.10！\n自动解锁了一个新槽位！'), 1500);
+        }
+      }
+
       // 递归检查是否连续升级
       if (pet.exp >= (LEVEL_TABLE[pet.level] || Infinity)) {
         checkLevelUp(pet, 0);

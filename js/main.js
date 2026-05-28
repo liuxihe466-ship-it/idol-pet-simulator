@@ -17,7 +17,7 @@ const Shelter = (() => {
     const pets = Storage.getPets();
     const unlockedSlots = Storage.getUnlockedSlots();
     const checkinData = Storage.getCheckin();
-    const totalSlots = 5;
+    const totalSlots = 13;
 
     let slotsHtml = '';
     for (let i = 0; i < totalSlots; i++) {
@@ -26,7 +26,7 @@ const Shelter = (() => {
         const animal = getAnimalById(pet.animalId);
         slotsHtml += `
           <div class="shelter-slot filled" data-pet-id="${pet.id}">
-            <canvas class="shelter-canvas" data-animal="${pet.animalId}" data-level="${pet.level}" data-items='${JSON.stringify(pet.equippedItems || [])}' width="80" height="80"></canvas>
+            <canvas class="shelter-canvas" data-animal="${pet.animalId}" data-level="${pet.level}" data-items='${JSON.stringify(pet.equippedItems || [])}' width="64" height="64"></canvas>
             <div class="shelter-pet-name">${pet.nickname}</div>
             <div class="shelter-pet-info">Lv.${pet.level} ${animal ? animal.name : ''}</div>
           </div>`;
@@ -41,8 +41,8 @@ const Shelter = (() => {
         slotsHtml += `
           <div class="shelter-slot locked" data-slot="${i}">
             <div class="slot-lock-icon">🔒</div>
-            <div class="slot-lock-cost">${cost} 星星币</div>
-            <div class="slot-lock-current">拥有：${checkinData.totalStars}</div>
+            <div class="slot-lock-cost">${cost} 星星币解锁</div>
+            <div class="slot-lock-alt">或 宠物达Lv.10解锁</div>
           </div>`;
       }
     }

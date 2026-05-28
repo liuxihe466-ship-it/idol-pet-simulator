@@ -486,18 +486,18 @@ body {
 
 .shelter-slots {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
   margin-bottom: 24px;
 }
 
 .shelter-slot {
-  padding: 12px;
+  padding: 8px;
   text-align: center;
   border: 3px solid #E0D0E0;
   background: #FFF;
   cursor: pointer;
-  min-height: 130px;
+  min-height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -552,9 +552,9 @@ body {
   color: #FFD700;
 }
 
-.slot-lock-current {
+.slot-lock-alt {
   font-size: 6px;
-  color: #999;
+  color: #B0E0B0;
   margin-top: 4px;
 }
 
@@ -1063,7 +1063,7 @@ body {
   .home-title { font-size: 20px; }
   .home-subtitle { font-size: 14px; }
   .action-buttons { grid-template-columns: 1fr 1fr; }
-  .shelter-slots { grid-template-columns: 1fr 1fr; }
+  .shelter-slots { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 /* 去掉 number input 的 spinner */

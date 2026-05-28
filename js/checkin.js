@@ -1,13 +1,15 @@
 // checkin.js — 签到系统
 const Checkin = (() => {
   const MILESTONES = [
-    { days: 2, stars: 15, label: '连续2天：+15星星币' },
-    { days: 5, stars: 40, item: 'rainbow_scarf', label: '连续5天：七日彩虹围巾 +40星星币' },
-    { days: 10, stars: 60, item: 'star_headband', label: '连续10天：星星发箍 +60星星币' },
-    { days: 20, stars: 100, item: 'legend_stick', label: '连续20天：传说应援棒 +100星星币' },
+    { days: 2, stars: 20, label: '连续2天：+20星星币' },
+    { days: 5, stars: 50, item: 'rainbow_scarf', label: '连续5天：七日彩虹围巾 +50星星币' },
+    { days: 10, stars: 80, item: 'star_headband', label: '连续10天：星星发箍 +80星星币' },
+    { days: 20, stars: 120, item: 'legend_stick', label: '连续20天：传说应援棒 +120星星币' },
+    { days: 30, stars: 200, item: 'crown', label: '连续30天：皇冠 +200星星币' },
+    { days: 50, stars: 300, item: 'wings', label: '连续50天：翅膀特效 +300星星币' },
   ];
 
-  const SLOT_COSTS = [0, 20, 50, 100, 180]; // 1-5号槽位
+  const SLOT_COSTS = [0, 15, 30, 50, 70, 100, 130, 160, 200, 250, 300, 350, 400]; // 1-13号槽位
 
   function getToday() {
     return new Date().toISOString().split('T')[0];
@@ -40,8 +42,8 @@ const Checkin = (() => {
     }
 
     // 基础奖励
-    data.totalStars += 15;
-    let bonusMsg = '签到成功！+15星星币';
+    data.totalStars += 20;
+    let bonusMsg = '签到成功！+20星星币';
 
     // 给当前选中的宠物加经验
     const pets = Storage.getPets();
