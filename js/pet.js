@@ -27,7 +27,7 @@ const PetCare = (() => {
 
   // 升级解锁奖励
   const LEVEL_REWARDS = {
-    2:  { items: ['bib_blue', 'bib_yellow'], label: '口水巾（蓝色、黄色）' },
+    2:  { items: ['bib_blue', 'bib_yellow', 'bib_purple'], label: '口水巾（蓝色、黄色、紫色）' },
     3:  { items: ['bow'], label: '小蝴蝶结' },
     4:  { action: 'pat', label: '新互动：摸头头' },
     5:  { items: ['hairpin_flower', 'hairpin_star', 'hairpin_heart', 'hairpin_ribbon', 'hairpin_crown_mini'], label: '发卡（5款）' },

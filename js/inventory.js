@@ -4,6 +4,7 @@ const Inventory = (() => {
     { id: 'bib_pink', name: '粉色口水巾', type: 'neck', unlockLevel: 1 },
     { id: 'bib_blue', name: '蓝色口水巾', type: 'neck', unlockLevel: 2 },
     { id: 'bib_yellow', name: '黄色口水巾', type: 'neck', unlockLevel: 2 },
+    { id: 'bib_purple', name: '紫色口水巾', type: 'neck', unlockLevel: 2 },
     { id: 'bow', name: '小蝴蝶结', type: 'head', unlockLevel: 3 },
     { id: 'hairpin_flower', name: '花朵发卡', type: 'head', unlockLevel: 5 },
     { id: 'hairpin_star', name: '星星发卡', type: 'head', unlockLevel: 5 },

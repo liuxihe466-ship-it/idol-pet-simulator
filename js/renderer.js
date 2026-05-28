@@ -436,6 +436,10 @@ const PixelRenderer = (() => {
         rect(ctx, headX - 2, headY + 3, 5, 2, '#FFE4B5');
         rect(ctx, headX - 1, headY + 5, 3, 1, '#FFE4B5');
       },
+      bib_purple: (ctx) => {
+        rect(ctx, headX - 2, headY + 3, 5, 2, '#B088D0');
+        rect(ctx, headX - 1, headY + 5, 3, 1, '#B088D0');
+      },
       bow: (ctx) => {
         px(ctx, headX, headY - 4, '#FF6B6B');
         px(ctx, headX - 1, headY - 5, '#FF6B6B');
