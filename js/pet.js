@@ -45,13 +45,13 @@ const PetCare = (() => {
 
   // 互动定义
   const INTERACTIONS = {
-    feed:  { exp: 20, hunger: 30, mood: 5, energy: 0, cooldown: 10 * 60 * 1000, label: '喂食', anim: 'eat', sound: 'playEat', unlockedAt: 1 },
-    play:  { exp: 25, hunger: -10, mood: 20, energy: -15, cooldown: 15 * 60 * 1000, label: '玩耍', anim: 'play', sound: 'playPlay', unlockedAt: 1 },
-    rest:  { exp: 8, hunger: 0, mood: 5, energy: 25, cooldown: 0, label: '休息', anim: 'idle', sound: 'playRest', unlockedAt: 1 },
-    poke:  { exp: 10, hunger: 0, mood: 10, energy: 0, cooldown: 3 * 60 * 1000, label: '逗一逗', anim: 'happy', sound: 'playSelect', unlockedAt: 1 },
-    sleep: { exp: 15, hunger: 0, mood: 10, energy: 50, cooldown: 6 * 60 * 60 * 1000, label: '睡觉', anim: 'sleep', sound: 'playSleep', unlockedAt: 1 },
-    pat:   { exp: 15, hunger: 0, mood: 15, energy: 0, cooldown: 8 * 60 * 1000, label: '摸头头', anim: 'happy', sound: 'playPat', unlockedAt: 4 },
-    walk:  { exp: 20, hunger: -5, mood: 15, energy: -10, cooldown: 15 * 60 * 1000, label: '散步', anim: 'happy', sound: 'playWalk', unlockedAt: 7 },
+    feed:  { exp: 35, hunger: 30, mood: 5, energy: 0, cooldown: 5 * 60 * 1000, maxBurst: 2, label: '喂食', anim: 'eat', sound: 'playEat', unlockedAt: 1 },
+    play:  { exp: 35, hunger: -10, mood: 20, energy: -15, cooldown: 10 * 60 * 1000, label: '玩耍', anim: 'play', sound: 'playPlay', unlockedAt: 1 },
+    rest:  { exp: 5, hunger: 0, mood: 5, energy: 25, cooldown: 0, label: '休息', anim: 'idle', sound: 'playRest', unlockedAt: 1 },
+    poke:  { exp: 15, hunger: 0, mood: 10, energy: 0, cooldown: 3 * 60 * 1000, label: '逗一逗', anim: 'happy', sound: 'playSelect', unlockedAt: 1 },
+    sleep: { exp: 30, hunger: 0, mood: 10, energy: 50, cooldown: 4 * 60 * 60 * 1000, label: '睡觉', anim: 'sleep', sound: 'playSleep', unlockedAt: 1 },
+    pat:   { exp: 25, hunger: 0, mood: 15, energy: 0, cooldown: 5 * 60 * 1000, label: '摸头头', anim: 'happy', sound: 'playPat', unlockedAt: 4 },
+    walk:  { exp: 50, hunger: -5, mood: 15, energy: -10, cooldown: 15 * 60 * 1000, label: '散步', anim: 'happy', sound: 'playWalk', unlockedAt: 7 },
   };
 
   function getPet() {
@@ -93,15 +93,32 @@ const PetCare = (() => {
       return;
     }
 
-    // 冷却检查
+    // 冷却检查（支持连续使用次数）
     const cooldownKey = 'last' + actionId.charAt(0).toUpperCase() + actionId.slice(1);
-    if (action.cooldown > 0 && pet[cooldownKey]) {
-      const remaining = action.cooldown - (Date.now() - pet[cooldownKey]);
-      if (remaining > 0) {
-        const mins = Math.ceil(remaining / 60000);
-        showToast(`还需等待 ${mins} 分钟`);
-        Audio8Bit.playError();
-        return;
+    const burstKey = actionId + 'Burst';
+    if (action.cooldown > 0) {
+      if (action.maxBurst) {
+        // 连续使用机制：用完 maxBurst 次后进入冷却
+        const burstCount = pet[burstKey] || 0;
+        if (burstCount >= action.maxBurst && pet[cooldownKey]) {
+          const remaining = action.cooldown - (Date.now() - pet[cooldownKey]);
+          if (remaining > 0) {
+            const mins = Math.ceil(remaining / 60000);
+            showToast(`还需等待 ${mins} 分钟`);
+            Audio8Bit.playError();
+            return;
+          }
+          // 冷却结束，重置计数
+          pet[burstKey] = 0;
+        }
+      } else if (pet[cooldownKey]) {
+        const remaining = action.cooldown - (Date.now() - pet[cooldownKey]);
+        if (remaining > 0) {
+          const mins = Math.ceil(remaining / 60000);
+          showToast(`还需等待 ${mins} 分钟`);
+          Audio8Bit.playError();
+          return;
+        }
       }
     }
 
@@ -120,7 +137,15 @@ const PetCare = (() => {
     pet.mood = Math.min(100, Math.max(0, pet.mood + action.mood));
     pet.energy = Math.min(100, Math.max(0, pet.energy + action.energy));
     pet.exp += expGain;
-    pet[cooldownKey] = Date.now();
+    // 更新冷却和连续使用计数
+    if (action.maxBurst) {
+      pet[burstKey] = (pet[burstKey] || 0) + 1;
+      if (pet[burstKey] >= action.maxBurst) {
+        pet[cooldownKey] = Date.now(); // 用完次数才开始冷却
+      }
+    } else {
+      pet[cooldownKey] = Date.now();
+    }
     pet.lastInteraction = Date.now();
 
     // 播放音效和动画
