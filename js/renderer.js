@@ -572,7 +572,7 @@ const PixelRenderer = (() => {
   // 主渲染函数
   // 奶牛猫花纹
   function drawTuxedoMarkings(ctx, pos, colors, stage, anim) {
-    const patch = colors.secondary; // 黑色斑块
+    const black = '#1A1A1A';
     const s = stageScale(stage);
     const bodyW = Math.round(6 * s.body);
     const bodyH = Math.round(5 * s.body);
@@ -580,38 +580,80 @@ const PixelRenderer = (() => {
     const hx = pos.headX;
     const hy = pos.headY;
     const by = pos.baseY;
+    const hr = headSize >> 1;
+    const eyeOff = Math.max(1, headSize >> 2);
 
-    // 额头黑色斑块
-    rect(ctx, hx - 1, hy - (headSize >> 1), 3, 2, patch);
-    px(ctx, hx, hy - (headSize >> 1) + 2, patch);
+    // === 头部 ===
+    // 头顶黑色（上半圆覆盖）
+    for (let dy = -hr; dy <= -1; dy++) {
+      const rowW = Math.round(Math.sqrt(hr * hr - dy * dy));
+      for (let dx = -rowW; dx <= rowW; dx++) {
+        px(ctx, hx + dx, hy + dy, black);
+      }
+    }
+    // 额头中间留一撮白（奶牛特征）
+    px(ctx, hx, hy - 1, '#FFFFFF');
+    px(ctx, hx + 1, hy - 1, '#FFFFFF');
 
-    // 耳朵覆盖为黑色
+    // 耳朵黑色
     const earW = Math.max(2, headSize >> 2);
     for (let i = 0; i < earW; i++) {
-      rect(ctx, hx - (headSize >> 1) + i, hy - (headSize >> 1) - earW + i, 1, 1, patch);
-      rect(ctx, hx + (headSize >> 1) - i, hy - (headSize >> 1) - earW + i, 1, 1, patch);
+      rect(ctx, hx - hr + i, hy - hr - earW + i, 1, 1, black);
+      rect(ctx, hx + hr - i, hy - hr - earW + i, 1, 1, black);
     }
-    // 保留粉色内耳
-    px(ctx, hx - (headSize >> 1) + 1, hy - (headSize >> 1) - earW + 2, '#FFB6C1');
-    px(ctx, hx + (headSize >> 1) - 1, hy - (headSize >> 1) - earW + 2, '#FFB6C1');
+    px(ctx, hx - hr + 1, hy - hr - earW + 2, '#FFB6C1');
+    px(ctx, hx + hr - 1, hy - hr - earW + 2, '#FFB6C1');
 
-    // 背部黑色斑块
-    rect(ctx, hx - 1, by, bodyW >> 1, 2, patch);
-    rect(ctx, hx + 1, by + 2, (bodyW >> 2), 1, patch);
+    // 重绘眼睛（保证可见）
+    if (anim !== 'sleep') {
+      px(ctx, hx - eyeOff, hy - 1, colors.eye);
+      px(ctx, hx + eyeOff, hy - 1, colors.eye);
+      px(ctx, hx - eyeOff, hy, darken(colors.eye, 20));
+      px(ctx, hx + eyeOff, hy, darken(colors.eye, 20));
+    }
 
-    // 左侧身体斑块
-    rect(ctx, hx - (bodyW >> 1) + 1, by + 1, 2, 2, patch);
+    // 鼻子重绘
+    px(ctx, hx, hy + 1, '#FFB6C1');
 
-    // 尾巴黑色
-    const tailX = hx + (bodyW >> 1);
-    rect(ctx, tailX, by, 1, 1, patch);
-    rect(ctx, tailX + 1, by - 1, 1, 1, patch);
-    rect(ctx, tailX + 2, by - 2, 1, 1, patch);
+    // 胡须用深灰（白底上可见）
+    rect(ctx, hx - eyeOff - 3, hy + 1, 2, 1, '#555555');
+    rect(ctx, hx + eyeOff + 2, hy + 1, 2, 1, '#555555');
 
-    // 胡须用黑色
-    const eyeOff = Math.max(1, headSize >> 2);
-    rect(ctx, hx - eyeOff - 3, hy + 1, 2, 1, '#333333');
-    rect(ctx, hx + eyeOff + 2, hy + 1, 2, 1, '#333333');
+    // 脸颊轮廓（白底需要淡灰勾边）
+    px(ctx, hx - hr, hy, '#DDDDDD');
+    px(ctx, hx + hr, hy, '#DDDDDD');
+    px(ctx, hx - hr, hy + 1, '#DDDDDD');
+    px(ctx, hx + hr, hy + 1, '#DDDDDD');
+
+    // === 身体 ===
+    const bw2 = bodyW >> 1;
+    const bh2 = (bodyH >> 1) - 1;
+    // 背部黑色（身体上半部分）
+    for (let dy = -bh2; dy <= 0; dy++) {
+      const rowW = Math.round(bw2 * Math.sqrt(1 - (dy * dy) / (bh2 * bh2)));
+      for (let dx = -rowW; dx <= rowW; dx++) {
+        px(ctx, hx + dx, by + 2 + dy, black);
+      }
+    }
+    // 肚皮保持白色（下半部分已经是白色）
+
+    // 右侧身体额外斑块（不对称，更像奶牛）
+    px(ctx, hx + bw2 - 1, by + 2, black);
+    px(ctx, hx + bw2 - 1, by + 3, black);
+
+    // === 腿 ===
+    const legY = by + (bodyH >> 1);
+    // 左腿黑色
+    rect(ctx, hx - (bodyW >> 2), legY - 1, 2, 3, black);
+    // 右腿白色保留，加灰色轮廓
+    rect(ctx, hx + (bodyW >> 2) - 1, legY + 1, 2, 1, '#DDDDDD');
+
+    // === 尾巴黑色 ===
+    const tailX = hx + bw2;
+    rect(ctx, tailX, by, 1, 1, black);
+    rect(ctx, tailX + 1, by - 1, 1, 1, black);
+    rect(ctx, tailX + 2, by - 2, 1, 1, black);
+    rect(ctx, tailX + 2, by - 3, 1, 1, black);
   }
 
   function drawAnimal(canvas, animalId, level, anim, frame, equippedItems) {
