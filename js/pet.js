@@ -49,7 +49,7 @@ const PetCare = (() => {
     play:  { exp: 35, hunger: -10, mood: 20, energy: -15, cooldown: 10 * 60 * 1000, label: '玩耍', anim: 'play', sound: 'playPlay', unlockedAt: 1 },
     rest:  { exp: 5, hunger: 0, mood: 5, energy: 25, cooldown: 0, label: '休息', anim: 'idle', sound: 'playRest', unlockedAt: 1 },
     poke:  { exp: 15, hunger: 0, mood: 10, energy: 0, cooldown: 3 * 60 * 1000, label: '逗一逗', anim: 'happy', sound: 'playSelect', unlockedAt: 1 },
-    sleep: { exp: 30, hunger: 0, mood: 10, energy: 50, cooldown: 4 * 60 * 60 * 1000, label: '睡觉', anim: 'sleep', sound: 'playSleep', unlockedAt: 1 },
+    sleep: { exp: 40, hunger: 0, mood: 10, energy: 50, cooldown: 1 * 60 * 60 * 1000, label: '睡觉', anim: 'sleep', sound: 'playSleep', unlockedAt: 1 },
     pat:   { exp: 25, hunger: 0, mood: 15, energy: 0, cooldown: 5 * 60 * 1000, label: '摸头头', anim: 'happy', sound: 'playPat', unlockedAt: 4 },
     walk:  { exp: 50, hunger: -5, mood: 15, energy: -10, cooldown: 15 * 60 * 1000, label: '散步', anim: 'happy', sound: 'playWalk', unlockedAt: 7 },
   };
