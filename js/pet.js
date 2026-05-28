@@ -276,6 +276,7 @@ const PetCare = (() => {
           <div class="care-top-right">
             <button class="icon-btn" id="care-inventory" title="换装">🎒</button>
             <button class="icon-btn" id="care-share" title="分享">📷</button>
+            <button class="icon-btn" id="care-release" title="放生">🏠</button>
           </div>
         </div>
 
@@ -341,6 +342,17 @@ const PetCare = (() => {
       Audio8Bit.playClick();
       ShareCard.generate(currentPetId);
     });
+
+    container.querySelector('#care-release').addEventListener('click', () => {
+      Audio8Bit.playClick();
+      showConfirm(`确定要放生「${pet.nickname}」吗？\n放生后将无法恢复！`, () => {
+        Storage.deletePet(currentPetId);
+        unload();
+        showPage('shelter');
+        Shelter.render();
+        showToast('已放生，希望它在大自然过得开心~');
+      });
+    });
   }
 
   return { load, unload, renderCareUI, getPet: () => getPet(), getCurrentPetId: () => currentPetId };
@@ -373,6 +385,27 @@ function showModal(msg) {
   document.getElementById('modal-content').textContent = msg;
   overlay.style.display = 'flex';
   document.getElementById('modal-close').onclick = () => {
+    overlay.style.display = 'none';
+  };
+}
+
+// 确认弹窗（带取消按钮）
+function showConfirm(msg, onConfirm) {
+  let overlay = document.getElementById('confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'confirm-overlay';
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `<div class="modal-box"><div class="modal-content" id="confirm-content"></div><div class="confirm-buttons"><button class="pixel-btn confirm-yes" id="confirm-yes">确定放生</button><button class="pixel-btn modal-close" id="confirm-no">再想想</button></div></div>`;
+    document.body.appendChild(overlay);
+  }
+  document.getElementById('confirm-content').textContent = msg;
+  overlay.style.display = 'flex';
+  document.getElementById('confirm-yes').onclick = () => {
+    overlay.style.display = 'none';
+    onConfirm();
+  };
+  document.getElementById('confirm-no').onclick = () => {
     overlay.style.display = 'none';
   };
 }

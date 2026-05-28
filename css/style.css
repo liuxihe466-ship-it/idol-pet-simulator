@@ -1008,6 +1008,22 @@ body {
   font-size: 9px;
 }
 
+.confirm-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirm-yes {
+  font-size: 9px;
+  background: #FF6B6B;
+  color: #FFF;
+}
+
+.confirm-yes:hover {
+  background: #FF4444;
+}
+
 /* 分享弹窗 */
 .share-box {
   background: #FFF;
