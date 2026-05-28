@@ -37,6 +37,17 @@ const Inventory = (() => {
     const pet = pets.find(p => p.id === petId);
     if (!pet) return;
 
+    // 自动补全：根据当前等级补充应解锁但缺失的物品
+    if (!pet.unlockedItems) pet.unlockedItems = [];
+    let updated = false;
+    ALL_ITEMS.forEach(item => {
+      if (item.unlockLevel > 0 && pet.level >= item.unlockLevel && !pet.unlockedItems.includes(item.id)) {
+        pet.unlockedItems.push(item.id);
+        updated = true;
+      }
+    });
+    if (updated) Storage.updatePet(petId, { unlockedItems: pet.unlockedItems });
+
     const container = document.getElementById('page-inventory');
     const unlocked = pet.unlockedItems || [];
     const equipped = pet.equippedItems || [];
