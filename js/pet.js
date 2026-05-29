@@ -45,7 +45,7 @@ const PetCare = (() => {
 
   // 互动定义
   const INTERACTIONS = {
-    feed:  { exp: 35, hunger: 30, mood: 5, energy: 0, cooldown: 3 * 60 * 1000, maxBurst: 2, label: '喂食', anim: 'eat', sound: 'playEat', unlockedAt: 1 },
+    feed:  { exp: 35, hunger: 30, mood: 5, energy: 0, cooldown: 3 * 60 * 1000, maxBurst: 3, label: '喂食', anim: 'eat', sound: 'playEat', unlockedAt: 1 },
     play:  { exp: 35, hunger: -10, mood: 20, energy: -15, cooldown: 10 * 60 * 1000, label: '玩耍', anim: 'play', sound: 'playPlay', unlockedAt: 1 },
     rest:  { exp: 5, hunger: -2, mood: 5, energy: 25, cooldown: 0, label: '休息', anim: 'idle', sound: 'playRest', unlockedAt: 1 },
     poke:  { exp: 15, hunger: 0, mood: 10, energy: 0, cooldown: 3 * 60 * 1000, label: '逗一逗', anim: 'happy', sound: 'playSelect', unlockedAt: 1 },
